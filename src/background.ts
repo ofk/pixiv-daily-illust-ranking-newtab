@@ -1,6 +1,40 @@
 import { storage } from './utils/storage';
 import type { Artwork } from './utils/types';
 
+const updateRequestHeader = (
+  requestHeaders: chrome.webRequest.HttpHeader[],
+  name: string,
+  value: string
+): void => {
+  const requestHeader = requestHeaders.find(
+    (header) => header.name.toLowerCase() === name.toLowerCase()
+  );
+  if (requestHeader) {
+    requestHeader.value = value;
+  } else {
+    requestHeaders.push({ name, value });
+  }
+};
+
+chrome.webRequest.onBeforeSendHeaders.addListener(
+  (details) => {
+    if (details.initiator === `chrome-extension://${chrome.runtime.id}`) {
+      if (details.requestHeaders) {
+        updateRequestHeader(details.requestHeaders, 'Referer', 'https://www.pixiv.net/');
+        return {
+          requestHeaders: details.requestHeaders,
+        };
+      }
+    }
+    return undefined;
+  },
+  {
+    urls: ['https://i.pximg.net/*'],
+    types: ['image'],
+  },
+  ['requestHeaders', 'extraHeaders', 'blocking']
+);
+
 const fetchPixivRanking = async (params: Record<string, string>): Promise<Artwork[]> => {
   const searchParams = new URLSearchParams();
   Object.keys(params).forEach((k) => {

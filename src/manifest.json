@@ -4,8 +4,7 @@
     "128": "icon-128.png"
   },
   "background": {
-    "scripts": ["background.js"],
-    "persistent": false
+    "scripts": ["background.js"]
   },
   "chrome_url_overrides": {
     "newtab": "newtab.html"
@@ -14,5 +13,10 @@
     "page": "options.html",
     "open_in_tab": false
   },
-  "permissions": ["https://www.pixiv.net/"]
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "https://www.pixiv.net/",
+    "https://i.pximg.net/"
+  ]
 }
