@@ -1,6 +1,7 @@
 {
   "private": true,
   "name": "chrome-extension-boilerplate",
+  "description": "Boilerplate code for a Chrome extension.",
   "license": "UNLICENSED",
   "author": "ofk <ofkjpn+github@gmail.com>",
   "version": "1.0.0",
