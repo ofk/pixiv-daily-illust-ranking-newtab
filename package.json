@@ -1,7 +1,7 @@
 {
   "private": true,
-  "name": "chrome-extension-boilerplate",
-  "description": "Boilerplate code for a Chrome extension.",
+  "name": "pixiv-daily-illust-ranking-newtab",
+  "description": "Show an image of pixiv daily illust ranking on a new tab.",
   "license": "UNLICENSED",
   "author": "ofk <ofkjpn+github@gmail.com>",
   "version": "1.0.0",

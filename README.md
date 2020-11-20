@@ -1,3 +1,3 @@
-# chrome-extension-boilerplate
+# pixiv-daily-illust-ranking-newtab
 
-Boilerplate code for a Chrome extension using TypeScript, React, Material UI and Webpack.
+Show an image of [pixiv daily illust ranking](https://www.pixiv.net/ranking.php?mode=daily&content=illust) on a new tab.
