@@ -1,29 +1,63 @@
-chrome.runtime.sendMessage({ action: `${process.env.PACKAGE_NAME}.getOptions` }, ({ options }) => {
-  {
-    const p = document.body.appendChild(document.createElement('p'));
-    const label = p.appendChild(document.createElement('label'));
-    const input = label.appendChild(document.createElement('input'));
-    input.type = 'checkbox';
-    input.checked = options.enabled;
-    input.addEventListener('change', (event) => {
-      chrome.runtime.sendMessage({
-        action: `${process.env.PACKAGE_NAME}.setOptions`,
-        options: { ...options, enabled: (event.target as HTMLInputElement).checked },
-      });
+import React, { useEffect, useState } from 'react';
+import ReactDOM from 'react-dom';
+import { Grid, FormControlLabel, Checkbox, TextField } from '@material-ui/core';
+
+import { Base } from './utils/Base';
+
+const App: React.FC = () => {
+  const [options, setOptions] = useState<{ enabled: boolean; color: string } | null>(null);
+
+  useEffect(() => {
+    chrome.runtime.sendMessage({ action: `${process.env.PACKAGE_NAME}.getOptions` }, (message) => {
+      setOptions(message.options);
     });
-    label.appendChild(document.createTextNode('Enabled'));
-  }
-  {
-    const p = document.body.appendChild(document.createElement('p'));
-    const label = p.appendChild(document.createElement('label'));
-    label.appendChild(document.createTextNode('Color'));
-    const input = label.appendChild(document.createElement('input'));
-    input.value = options.color;
-    input.addEventListener('change', (event) => {
-      chrome.runtime.sendMessage({
-        action: `${process.env.PACKAGE_NAME}.setOptions`,
-        options: { ...options, color: (event.target as HTMLInputElement).value },
-      });
+  }, []);
+
+  const updateOptions = (nextOptions: { enabled: boolean; color: string }): void => {
+    setOptions(nextOptions);
+    chrome.runtime.sendMessage({
+      action: `${process.env.PACKAGE_NAME}.setOptions`,
+      options: nextOptions,
     });
-  }
-});
+  };
+
+  return (
+    <Base>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          {options ? (
+            <>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={options.enabled}
+                    onChange={(event): void => {
+                      updateOptions({ ...options, enabled: event.target.checked });
+                    }}
+                    name="enabled"
+                    color="primary"
+                  />
+                }
+                label="Enabled"
+              />
+              <TextField
+                id="color"
+                name="color"
+                label="Color"
+                fullWidth
+                margin="dense"
+                size="small"
+                value={options.color}
+                onChange={(event): void => {
+                  updateOptions({ ...options, color: event.target.value });
+                }}
+              />
+            </>
+          ) : null}
+        </Grid>
+      </Grid>
+    </Base>
+  );
+};
+
+ReactDOM.render(<App />, document.querySelector('#app'));
