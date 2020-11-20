@@ -67,6 +67,7 @@ htmlPaths.forEach((htmlPath) => {
     new HtmlWebpackPlugin({
       title: name,
       filename: htmlPath,
+      template: path.resolve(__dirname, 'src', 'template.ejs'),
       chunks: [name],
     })
   );
